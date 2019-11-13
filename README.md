@@ -1,4 +1,4 @@
-Play the game [here](https://github.com/facebook/create-react-app).
+Play the game [here](http://shivamgupta94.github.io/checkers-react).
 
 ### Introduction
 
