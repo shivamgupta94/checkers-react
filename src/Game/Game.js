@@ -27,9 +27,12 @@ class Game extends Component {
     componentDidUpdate(nextProps) {
 
         //On detecting new game start, resetting the timer
-        if (nextProps.gameEnd !== this.props.gameEnd) {
+        if (nextProps.gameEnd === false && this.props.gameEnd !== false) {
             clearInterval(this.state.timer);
             this.setState({ timer: null })
+        }
+
+        if (nextProps.gameEnd !== false && this.props.gameEnd === false) {
             let timer = setInterval(this.tick, 1000);
             this.setState({ timer });
         }
