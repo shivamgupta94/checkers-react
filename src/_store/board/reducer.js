@@ -108,24 +108,41 @@ export default function reduce(state = initialState, action = {}) {
             pastBoard.forEach((row, rowIndex) => {
                 row.forEach((cell, cellIndex) => {
                     let possibleMove = highlightValidMovesForPiece(rowIndex, cellIndex, pastBoard[rowIndex][cellIndex], pastBoard, 'o')
-                    if (pastBoard[rowIndex][cellIndex] === 'o' && (possibleMove.length > 0))
+                    if (pastBoard[rowIndex][cellIndex] === 'o' && (possibleMove.length > 0)) {
                         ai_pawns.push([rowIndex, cellIndex, possibleMove]);
+                    }
                 })
             })
 
             if (ai_pawns.length === 0)
                 gameEnd = true
 
-            //Select random AI pawn
-            // TODO - P1 : Killer mode - pick up pawn which will kill max opponent pawns
-            let randomSelectedAIPawn = ai_pawns[Math.floor(Math.random() * ai_pawns.length)];
+            //Adding better AI
+            //DONE -> TODO - P1 : Killer mode - pick up pawn which will kill max opponent pawns
+            /*
+				stores the move which will kill the most pawns as part of the pawn description
+            */
+            ai_pawns.forEach(item => {
+                let max = item[2][0]
+                item[2].forEach(move => {
+                    if (move[2].length > max[2].length)
+                        max = move
+                })
+                item[3] = max
+            })
+
+            //DONE -> TODO - P2 : Killer mode - pick move by checking length of element 3 in the array
+            //Sorts the pawns from most lethal to least leathal move
+            ai_pawns.sort((a, b) => {
+                return b[3][2].length - a[3][2].length
+            })
+
+            //Select most lethal AI pawn
+            let randomSelectedAIPawn = ai_pawns[0]
 
             if (randomSelectedAIPawn !== undefined) {
-
-                //Select random move for the Pawn
-                //TODO - P2 : Killer mode - pick move by checking length of element 3 in the array
-                let randomSelectedAIMove = randomSelectedAIPawn[2][Math.floor(Math.random() * randomSelectedAIPawn[2].length)]
-
+                //Select most lethal move for the Pawn
+                let randomSelectedAIMove = randomSelectedAIPawn[3]
 
                 //Killing the opponents 
                 randomSelectedAIMove[2].forEach((item, index) => {
